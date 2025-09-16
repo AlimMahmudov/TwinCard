@@ -8,27 +8,47 @@ class UserProfile(AbstractUser):
     company = models.CharField(max_length=64)
     description = models.TextField()
     avatar = models.ImageField(upload_to='avatar_image/')
-    password = models.CharField()
+    password = models.CharField(max_length=255, default="123456789")
 
 
-class Contact(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="contact_user")
+class Telegram(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="telegram_user")
     telegram = models.URLField(null=True, blank=True)
-    instagram = models.URLField(null=True, blank=True)
-    whatsapp = models.URLField(null=True, blank=True)
-    phone = models.CharField(null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)
-    linkedin = models.URLField(null=True, blank=True)
 
-    def __str__(self):
-        return f"Contact of {self.user}"
+
+class Instagram(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="instagram_user")
+    instagram = models.URLField(null=True, blank=True)
+
+
+class Whatsapp(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="whatsapp_user")
+    whatsapp = models.URLField(null=True, blank=True)
+
+
+class Phone(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="phone_user")
+    phone = models.PositiveSmallIntegerField(null=True, blank=True)
+
+
+class Email(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="email_user")
+    email = models.EmailField(null=True, blank=True)
+
+
+class Linkedin(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="linkedin_user")
+    linkedin = models.URLField(null=True, blank=True)
 
 
 class Project(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="project_user")
-    project_image = models.ImageField(upload_to='image_project/')
     project_name = models.CharField(max_length=124)
     project_description = models.TextField()
     follow = models.URLField()
 
+
+class ProjectImage(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True, related_name="images")
+    project_image = models.ImageField(upload_to='image_project/')
 
